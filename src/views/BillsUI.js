@@ -19,7 +19,6 @@ const row = (bill) => {
     `)
   }
 
-  //todo check here for modif @bug report bills
 const rows = (data) => {
   
   function sortByDate(x, y) {
