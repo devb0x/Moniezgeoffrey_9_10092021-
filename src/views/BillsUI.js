@@ -19,23 +19,21 @@ const row = (bill) => {
     `)
   }
 
-  //modif here
+  //todo check here for modif @bug report bills
 const rows = (data) => {
-  return (data && data.length) ? data.map(bill => row(bill)).join("") : ""
+  
+  function sortByDate(x, y) {
+    const a = new Date(x.date)
+    const b = new Date(y.date)
+        if (a < b) 
+        return 1
+      if (a> b)
+        return -1
+      return 0
+  }
+  
+  return (data && data.length) ? data.sort(sortByDate).map(bill => row(bill)).join("") : ""
 }
-
-// const rows = (data) => {
-
-//   return (data && data.length) ? data.map(bill => row(bill)) : ""
-// }
-// .sort((x, y) => {
-//   if (x.date < y.date) 
-//     return 1
-//   if (x.date > y.date)
-//     return -1
-//   return 0
-// }
-// )
 
 export default ({ data: bills, loading, error }) => {
   

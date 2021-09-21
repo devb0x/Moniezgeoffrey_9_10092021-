@@ -19,6 +19,23 @@ export default class NewBill {
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
+
+    // modif here bug hunt bills
+    const fileExt = filePath[filePath.length-1].split('.').pop().toLowerCase()
+    console.warn(fileExt)
+    console.log(fileName)
+
+    // if(fileExt !== 'jpg' || 'jpeg' || 'png') {
+    //   console.error('wrong file format')
+    //   return
+    // }
+
+    if (fileExt === 'mp4') {
+      console.log('mp4')
+      return
+    }
+    // end modif
+
     this.firestore
       .storage
       .ref(`justificatifs/${fileName}`)
