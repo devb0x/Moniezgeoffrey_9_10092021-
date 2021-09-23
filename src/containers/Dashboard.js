@@ -67,10 +67,11 @@ export const getStatus = (index) => {
 }
 
 export default class {
-  constructor({ document, onNavigate, firestore, bills, localStorage }) {
+  constructor({ document, onNavigate, firestore, bills, localStorage, openStatus }) {
     this.document = document
     this.onNavigate = onNavigate
     this.firestore = firestore
+    this.openStatus = false
     $('#arrow-icon1').click((e) => this.handleShowTickets(e, bills, 1))
     $('#arrow-icon2').click((e) => this.handleShowTickets(e, bills, 2))
     $('#arrow-icon3').click((e) => this.handleShowTickets(e, bills, 3))
@@ -131,9 +132,11 @@ export default class {
   }
 
   handleShowTickets(e, bills, index) {
+    this.openStatus =! this.openStatus
     if (this.counter === undefined || this.index !== index) this.counter = 0
     if (this.index === undefined || this.index !== index) this.index = index
-    if (this.counter % 2 === 0) {
+    // if (this.counter % 2 === 0) {
+    if (this.openStatus === true) {
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
       $(`#status-bills-container${this.index}`)
         .html(cards(filteredBills(bills, getStatus(this.index))))

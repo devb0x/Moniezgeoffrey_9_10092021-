@@ -15,8 +15,37 @@ export default class NewBill {
     this.fileName = null
     new Logout({ document, localStorage, onNavigate })
   }
+
+  mimeType(header) {
+    switch (header) {
+      case "89504e47":
+          file.type = "image/png";
+          break;
+      case "47494638":
+          type = "image/gif";
+          break;
+      case "ffd8ffe0":
+      case "ffd8ffe1":
+      case "ffd8ffe2":
+      case "ffd8ffe3":
+      case "ffd8ffe8":
+          type = "image/jpeg";
+          break;
+      default:
+          type = "unknown"; // Or you can use the blob.type as fallback
+          break;
+    }
+    console.log(type)
+    return type
+  }
+
   handleChangeFile = e => {
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
+    // let file = e.dataTransfert
+    let blob = file;
+    let fileReader = new FileReader()
+
+    console.log(file)
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
 
@@ -24,17 +53,35 @@ export default class NewBill {
     const fileExt = filePath[filePath.length-1].split('.').pop().toLowerCase()
     console.warn(fileExt)
     console.log(fileName)
+    console.log(file.type)
 
-    // if(fileExt !== 'jpg' || 'jpeg' || 'png') {
-    //   console.error('wrong file format')
-    //   return
-    // }
+    fileReader.onloadend = function(e) {
+      // console.log('start ?')
+      let arr = (new Uint8Array(e.target.result)).subarray(0, 4);
+      let header = "";
+      for(let i = 0; i < arr.length; i++) {
+         header += arr[i].toString(16);
+         console.warn(header)
+      }
+      console.log(header)
+      // this.mimeType(header)
 
-    if (fileExt === 'mp4') {
-      console.log('mp4')
-      return
-    }
-    // end modif
+      console.log(file.type)
+      console.log(file.name)
+      console.log(file.size)
+
+      fileReader.readAsArrayBuffer(blob);
+      console.log(blob)
+    
+    };
+  //   fileReader.readAsArrayBuffer(blob);
+
+
+  // if (fileExt === 'mp4') {
+  //   console.log('mp4')
+  //   return
+  // }
+  // end modif
 
     this.firestore
       .storage
