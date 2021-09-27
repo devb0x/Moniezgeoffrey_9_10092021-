@@ -136,9 +136,7 @@ export default class {
     this.onNavigate(ROUTES_PATH['Dashboard'])
   }
 
-  handleShowTickets(e, bills, index, openStatus) {
-    console.log('clic')
-    
+  handleShowTickets(e, bills, index, openStatus) {    
     this.openStatus =! this.openStatus
 
     if (this.counter === undefined || this.index !== index) this.counter = 0
@@ -159,7 +157,10 @@ export default class {
       this.openStatusList[`menu${this.index}`] =! this.openStatusList[`menu${this.index}`]
     }
 
+    
+
     bills.forEach(bill => {
+      $(`#open-bill${bill.id}`).off('click')
       $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
     })
 

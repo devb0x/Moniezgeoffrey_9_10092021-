@@ -13,77 +13,22 @@ export default class NewBill {
     file.addEventListener("change", this.handleChangeFile)
     this.fileUrl = null
     this.fileName = null
+    this.isFileValid = false
     new Logout({ document, localStorage, onNavigate })
-  }
-
-  mimeType(header) {
-    switch (header) {
-      case "89504e47":
-          file.type = "image/png";
-          break;
-      case "47494638":
-          type = "image/gif";
-          break;
-      case "ffd8ffe0":
-      case "ffd8ffe1":
-      case "ffd8ffe2":
-      case "ffd8ffe3":
-      case "ffd8ffe8":
-          type = "image/jpeg";
-          break;
-      default:
-          type = "unknown"; // Or you can use the blob.type as fallback
-          break;
-    }
-    console.log(type)
-    return type
   }
 
   handleChangeFile = e => {
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
-    // let file = e.dataTransfert
-    let blob = file;
-    let fileReader = new FileReader()
+    const mimeTypesValid = ["image/png", "image/jpg", "image/jpeg"];
+    this.isFileValid = mimeTypesValid.includes(file.type)
 
-    console.log(file)
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
 
-    // modif here bug hunt bills
-    const fileExt = filePath[filePath.length-1].split('.').pop().toLowerCase()
-    console.warn(fileExt)
-    console.log(fileName)
-    console.log(file.type)
-
-    fileReader.onloadend = function(e) {
-      // console.log('start ?')
-      let arr = (new Uint8Array(e.target.result)).subarray(0, 4);
-      let header = "";
-      for(let i = 0; i < arr.length; i++) {
-         header += arr[i].toString(16);
-         console.warn(header)
-      }
-      console.log(header)
-      // this.mimeType(header)
-
-      console.log(file.type)
-      console.log(file.name)
-      console.log(file.size)
-
-      fileReader.readAsArrayBuffer(blob);
-      console.log(blob)
-    
-    };
-  //   fileReader.readAsArrayBuffer(blob);
-
-
-  // if (fileExt === 'mp4') {
-  //   console.log('mp4')
-  //   return
-  // }
-  // end modif
-
-    this.firestore
+    if (!this.isFileValid) {
+      return
+    } else {
+      this.firestore
       .storage
       .ref(`justificatifs/${fileName}`)
       .put(file)
@@ -92,9 +37,15 @@ export default class NewBill {
         this.fileUrl = url
         this.fileName = fileName
       })
+    }
+
   }
+
   handleSubmit = e => {
     e.preventDefault()
+    if (!this.isFileValid) {
+      return
+    }
     console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
     const email = JSON.parse(localStorage.getItem("user")).email
     const bill = {
