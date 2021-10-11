@@ -28,6 +28,7 @@ export default class NewBill {
     if (!this.isFileValid) {
       return
     } else {
+      // add if firestore
       this.firestore
       .storage
       .ref(`justificatifs/${fileName}`)
