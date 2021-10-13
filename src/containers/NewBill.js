@@ -25,10 +25,9 @@ export default class NewBill {
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
 
-    if (!this.isFileValid) {
-      return
-    } else {
-      // add if firestore
+    if (this.isFileValid && this.firestore) {
+      document.getElementById('errorFileType').classList.add('hideErrorMessage');
+
       this.firestore
       .storage
       .ref(`justificatifs/${fileName}`)
@@ -37,9 +36,14 @@ export default class NewBill {
       .then(url => {
         this.fileUrl = url
         this.fileName = fileName
-      })
+      }) 
+    } else {
+      document.getElementById('errorFileType').classList.remove('hideErrorMessage');
+      this.document.querySelector(`input[data-testid='file']`).value = null;
     }
-
+    // else {
+    //   this.document.querySelector(`input[data-testid="file"]`).value = ''
+    // }
   }
 
   handleSubmit = e => {

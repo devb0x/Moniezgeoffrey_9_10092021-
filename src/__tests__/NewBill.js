@@ -97,47 +97,54 @@ describe("Given I am connected as an employee", () => {
     })
   })
 
-  // describe('When I choose an image to upload', () => {
-    // test('Then the file input should get the file name', () => {
-    //     // build user interface
-    //     const html = NewBillUI();
-    //     document.body.innerHTML = html;
+  describe('When I choose an image to upload', () => {
+    test('Then the file input should get the file name', () => {
+        // build user interface
+        const html = NewBillUI();
+        document.body.innerHTML = html;
 
-    //     // Init newBill
-    //     const newBill = new NewBill({
-    //         document,
-    //         onNavigate,
-    //         firestore: null,
-    //         localStorage: window.localStorage,
-    //     });
+        Object.defineProperty(window, 'localStorage', {
+          value: localStorageMock
+        })
 
-    //     // Mock function handleChangeFile
-    //     const handleChangeFile = jest.fn(() => newBill.handleChangeFile);
+        window.localStorage.setItem('user', JSON.stringify({
+          type: 'Employee'
+        }))
+  
 
-    //     // Add Event and fire
-    //     const inputFile = screen.getByTestId('file');
-    //     inputFile.addEventListener('change', handleChangeFile);
+        // Init newBill
+        const newBill = new NewBill({
+            document,
+            onNavigate,
+            firestore: null,
+            localStorage: window.localStorage,
+        });
 
-    //     // Launch event
-    //     fireEvent.change(inputFile, {
-    //         target: {
-    //             files: [new File(['image.png'], 'image.png', {
-    //                 type: 'image/png'
-    //             })],
-    //         }
-    //     });
+        // Mock function handleChangeFile
+        const handleChangeFile = jest.fn(() => newBill.handleChangeFile);
 
-    //     // handleChangeFile function must be called
-    //     expect(handleChangeFile).toBeCalled();
-    //     // The name of the file should be 'image.png'
-    //     console.log('undefined')
-    //     expect(inputFile.files[0].name).toBe('image.png');
-    //     console.log(inputFile.file[0].name)
-    //     // expect(screen.getByText('Envoyer une note de frais')).toBeTruthy();
-    //     // HTML must contain 'hideErrorMessage'
-    //     // expect(html.includes("<div class=\"hideErrorMessage\" id=\"errorFileType\" data-testid=\"errorFile\">")).toBeTruthy();
-    // });
-  // });
+        // Add Event and fire
+        const inputFile = screen.getByTestId('file');
+        inputFile.addEventListener('change', handleChangeFile);
+
+        // Launch event
+        fireEvent.change(inputFile, {
+            target: {
+                files: [new File(['image.png'], 'image.png', {
+                    type: 'image/png'
+                })],
+            }
+        });
+
+        // handleChangeFile function must be called
+        expect(handleChangeFile).toHaveBeenCalledTimes(1);
+        // The name of the file should be 'image.png'
+        expect(inputFile.files[0].name).toBe('image.png');
+        expect(screen.getByText('Envoyer une note de frais')).toBeTruthy();
+        // HTML must contain 'hideErrorMessage'
+        expect(html.includes("<div class=\"hideErrorMessage\" id=\"errorFileType\" data-testid=\"errorFile\">")).toBeTruthy();
+    });
+  });
 
 
 

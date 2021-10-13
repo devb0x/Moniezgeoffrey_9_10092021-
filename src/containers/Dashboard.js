@@ -141,7 +141,7 @@ export default class {
 
     if (this.counter === undefined || this.index !== index) this.counter = 0
     if (this.index === undefined || this.index !== index) this.index = index
-    console.log(this.openStatus[`menu${this.index}`])
+    // console.log(this.openStatus[`menu${this.index}`])
     // if (this.counter % 2 === 0) {
     if (!this.openStatusList[`menu${this.index}`]) {
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
