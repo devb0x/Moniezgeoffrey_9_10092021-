@@ -16,6 +16,7 @@ export const filteredBills = (data, status) => {
         selectCondition = (bill.status === status)
       } else {
         // in prod environment
+        /* istanbul ignore next */
         const userEmail = JSON.parse(localStorage.getItem("user")).email
         selectCondition =
           (bill.status === status) &&
@@ -31,7 +32,7 @@ export const card = (bill) => {
   const firstName = firstAndLastNames.includes('.') ?
     firstAndLastNames.split('.')[0] : ''
   const lastName = firstAndLastNames.includes('.') ?
-  firstAndLastNames.split('.')[1] : firstAndLastNames
+    firstAndLastNames.split('.')[1] : firstAndLastNames
 
   return (`
     <div class='bill-card' id='open-bill${bill.id}' data-testid='open-bill${bill.id}'>
@@ -136,28 +137,21 @@ export default class {
     this.onNavigate(ROUTES_PATH['Dashboard'])
   }
 
-  handleShowTickets(e, bills, index, openStatus) {    
-    this.openStatus =! this.openStatus
-
+  handleShowTickets(e, bills, index, openStatus) {
     if (this.counter === undefined || this.index !== index) this.counter = 0
     if (this.index === undefined || this.index !== index) this.index = index
-    // console.log(this.openStatus[`menu${this.index}`])
-    // if (this.counter % 2 === 0) {
-    if (!this.openStatusList[`menu${this.index}`]) {
+    if (this.counter % 2 === 0) {
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
       $(`#status-bills-container${this.index}`)
         .html(cards(filteredBills(bills, getStatus(this.index))))
       this.counter ++
-      this.openStatusList[`menu${this.index}`] =! this.openStatusList[`menu${this.index}`]
     } else {
+      /* istanbul ignore next */
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)'})
       $(`#status-bills-container${this.index}`)
         .html("")
       this.counter ++
-      this.openStatusList[`menu${this.index}`] =! this.openStatusList[`menu${this.index}`]
     }
-
-    
 
     bills.forEach(bill => {
       $(`#open-bill${bill.id}`).off('click')
@@ -165,10 +159,10 @@ export default class {
     })
 
     return bills
-
   }
 
   // not need to cover this function by tests
+  /* istanbul ignore next */
   getBillsAllUsers = () => {
     if (this.firestore) {
       return this.firestore
@@ -189,6 +183,7 @@ export default class {
   }
     
   // not need to cover this function by tests
+  /* istanbul ignore next */
   updateBill = (bill) => {
     if (this.firestore) {
     return this.firestore

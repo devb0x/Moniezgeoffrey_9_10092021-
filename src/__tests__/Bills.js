@@ -45,6 +45,29 @@ describe("Given I am connected as an employee", () => {
 
     // $.fn.modal = jest.fn()
   })
+  describe("When i am on Bils Page but it's loading", () => {
+    test("Then i should land on loading page", () => {
+      const html = BillsUI({
+        data: [],
+        loading: true
+      })
+      document.body.innerHTML = html
+
+      expect(screen.getAllByText('Loading...')).toBeTruthy()
+    })
+  })
+  describe("When i am on Bills Page but the backend send an error message", () => {
+    test("Then i should land on error page", () => {
+      const html = BillsUI({
+        data: [],
+        loading: false,
+        error: 'Something get wrong'
+      })
+      document.body.innerHTML = html
+
+      expect(screen.getAllByText('Erreur')).toBeTruthy()
+    })
+  })
   describe("When I am on Bills Page", () => {
     test("Then bill icon in vertical layout should be highlighted", () => {
       const pathname = ROUTES_PATH['Bills']
@@ -78,48 +101,34 @@ describe("Given I am connected as an employee", () => {
       expect(dates).toEqual(datesSorted)
     })
 
-    test("when i click on an eye icon the modal should pop", () => {
-      const pathname = ROUTES_PATH['Bills']
-
-      Object.defineProperty(window, 'location', {
-        value: {
-          hash: pathname
-        }
+    describe("Given i am connected aas an Employee and i am on the Bills page", () => {
+      describe("When i click on  the New Bill button", () => {
+        test("When i click on new bill i should be redirect on newbill", () => {
+          const html = BillsUI({ data: [] })
+          document.body.innerHTML = html
+    
+          const firestore = null
+    
+          const allBills = new Bills({
+            document,
+            onNavigate,
+            firestore,
+            localStorage: window.localStorage,
+          });
+    
+          const handleClickNewBill = jest.fn(allBills.handleClickNewBill)
+          // Get button eye in DOM
+          const billBtn = screen.getByTestId('btn-new-bill')
+    
+          // Add event and fire
+          billBtn.addEventListener('click', handleClickNewBill)
+          fireEvent.click(billBtn)
+    
+          // screen should show Envoyer une note de frais
+          expect(screen.getAllByText('Envoyer une note de frais')).toBeTruthy()
+          // expect(screen.getAllByText('Envoyer une note de frais')).toBeFalsy();
+        })
       })
-
-      const html = BillsUI({ data: bills })
-      document.body.innerHTML = html
-
-      const modal =  $.fn.modal = jest.fn()
-      const eye = screen.getAllByTestId('icon-eye')[0]
-      eye.addEventListener('click', modal)
-      fireEvent.click(eye)
-      expect(modal).toHaveBeenCalled()
-    })
-
-    test("When i click on new bill i should be redirect on newbill", () => {
-      const html = BillsUI({ data: [] })
-      document.body.innerHTML = html
-
-      const firestore = null
-
-      const allBills = new Bills({
-        document,
-        onNavigate,
-        firestore,
-        localStorage: window.localStorage,
-      });
-
-      const handleClickNewBill = jest.fn(allBills.handleClickNewBill);
-      // Get button eye in DOM
-      const billBtn = screen.getByTestId('btn-new-bill');
-
-      // Add event and fire
-      billBtn.addEventListener('click', handleClickNewBill);
-      fireEvent.click(billBtn);
-
-      // screen should show Envoyer une note de frais
-      expect(screen.getAllByText('Envoyer une note de frais')).toBeTruthy();
     })
   })
 

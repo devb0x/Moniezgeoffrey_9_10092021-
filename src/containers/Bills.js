@@ -38,6 +38,7 @@ export default class {
       .then(snapshot => {
         const bills = snapshot.docs
           .map(doc => {
+            /* istanbul ignore next */
             try {
               return {
                 ...doc.data(),
@@ -55,6 +56,7 @@ export default class {
               }
             }
           })
+          /* istanbul ignore next */
           .filter(bill => bill.email === userEmail)
           console.log('length', bills.length)
         return bills

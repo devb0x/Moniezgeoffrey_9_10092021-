@@ -25,6 +25,7 @@ export default class NewBill {
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
 
+    /* istanbul ignore next */
     if (this.isFileValid && this.firestore) {
       document.getElementById('errorFileType').classList.add('hideErrorMessage');
 
@@ -51,7 +52,6 @@ export default class NewBill {
     if (!this.isFileValid) {
       return
     }
-    console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
     const email = JSON.parse(localStorage.getItem("user")).email
     const bill = {
       email,
@@ -66,11 +66,14 @@ export default class NewBill {
       fileName: this.fileName,
       status: 'pending'
     }
+    console.log(bill)
     this.createBill(bill)
     this.onNavigate(ROUTES_PATH['Bills'])
   }
 
   // not need to cover this function by tests
+
+    /* istanbul ignore next */
   createBill = (bill) => {
     if (this.firestore) {
       this.firestore
