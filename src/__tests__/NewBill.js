@@ -84,11 +84,12 @@ describe("Given I am connected as an employee", () => {
       localStorage: window.localStorage,
     })
 
-    document.body.innerHTML = `<div id="root"></div>`
+    // document.body.innerHTML = `<div id="root"></div>`
   })
 
   describe("When I am on NewBill Page", () => {
     test("Then the icon mail should be highlighted", () => {
+      document.body.innerHTML = `<div id="root"></div>`
       Router()
 
       const iconMail = document.querySelector('#layout-icon2')
@@ -99,49 +100,49 @@ describe("Given I am connected as an employee", () => {
   })
   describe('When I choose an image to upload', () => {
     test('Then the file input should get the file name', () => {
-        // build user interface
-        const html = NewBillUI()
-        document.body.innerHTML = html
+      const html = NewBillUI()
+      document.body.innerHTML = html
 
-        Object.defineProperty(window, 'localStorage', {
-          value: localStorageMock
-        })
+      Object.defineProperty(window, 'localStorage', {
+        value: localStorageMock
+      })
 
-        window.localStorage.setItem('user', JSON.stringify({
-          type: 'Employee'
-        }))
-  
-        // Init newBill
-        const newBill = new NewBill({
-            document,
-            onNavigate,
-            firestore: null,
-            localStorage: window.localStorage,
-        });
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'Employee'
+      }))
 
-        // Mock function handleChangeFile
-        const handleChangeFile = jest.fn(() => newBill.handleChangeFile)
+      // Init newBill
+      const newBill = new NewBill({
+          document,
+          onNavigate,
+          firestore: null,
+          localStorage: window.localStorage,
+      });
 
-        // Add Event and fire
-        const inputFile = screen.getByTestId('file')
-        inputFile.addEventListener('change', handleChangeFile)
+      // Mock function handleChangeFile
+      const handleChangeFile = jest.fn(() => newBill.handleChangeFile)
 
-        // Launch event
-        fireEvent.change(inputFile, {
-            target: {
-                files: [new File(['image.png'], 'image.png', {
-                    type: 'image/png'
-                })],
-            }
-        })
+      // Add Event and fire
+      const inputFile = screen.getByTestId('file')
+      console.log(inputFile)
+      inputFile.addEventListener('change', handleChangeFile)
 
-        // handleChangeFile function must be called
-        expect(handleChangeFile).toHaveBeenCalledTimes(1)
-        // The name of the file should be 'image.png'
-        expect(inputFile.files[0].name).toBe('image.png')
-        expect(screen.getByText('Envoyer une note de frais')).toBeTruthy()
-        // HTML must contain 'hideErrorMessage'
-        expect(html.includes("<div class=\"hideErrorMessage\" id=\"errorFileType\" data-testid=\"errorFile\">")).toBeTruthy()
+      // Launch event
+      fireEvent.change(inputFile, {
+          target: {
+              files: [new File(['image.png'], 'image.png', {
+                  type: 'image/png'
+              })],
+          }
+      })
+
+      // handleChangeFile function must be called
+      expect(handleChangeFile).toHaveBeenCalledTimes(1)
+      // The name of the file should be 'image.png'
+      expect(inputFile.files[0].name).toBe('image.png')
+      expect(screen.getByText('Envoyer une note de frais')).toBeTruthy()
+      // HTML must contain 'hideErrorMessage'
+      expect(html.includes("<div class=\"hideErrorMessage\" id=\"errorFileType\" data-testid=\"errorFile\">")).toBeTruthy()
     });
   });
 
@@ -224,12 +225,6 @@ describe("Given I am connected as an employee", () => {
 
   // POST
   describe("Given i am connected as an employee", () => {
-    describe("When i create a new bill", () => {
-      test("Add bill to mock API POST", async () => {
-        // TODO (line 240)
-      })
-    })
-
     describe("When bill form is submitted", () => {
       test("Then add new bill", async () => {
         const html = NewBillUI()
@@ -274,7 +269,6 @@ describe("Given I am connected as an employee", () => {
         screen.getByTestId('vat').value = newBill.vat
         screen.getByTestId('pct').value = newBill.pct
         screen.getByTestId('commentary').value = newBill.commentary
-
         newBill.isFileValid = true;
 
         const submit = screen.getByTestId('form-new-bill')
@@ -284,9 +278,7 @@ describe("Given I am connected as an employee", () => {
         userEvent.click(submit)
 
         expect(handleSubmit).toHaveBeenCalled()
-
         expect(newBill.onNavigate).toBeCalledTimes(1);
-
         expect(newBill.onNavigate).toHaveBeenCalledWith(ROUTES_PATH["Bills"]);        
       })
     })

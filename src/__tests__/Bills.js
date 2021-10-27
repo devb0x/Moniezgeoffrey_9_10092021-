@@ -9,8 +9,6 @@ import Router from "../app/Router.js"
 import Firestore from '../app/Firestore'
 
 import { localStorageMock } from '../__mocks__/localStorage.js'
-import userEvent from "@testing-library/user-event"
-
 
 jest.mock('../app/Firestore')
 
@@ -126,7 +124,6 @@ describe("Given I am connected as an employee", () => {
     
           // screen should show Envoyer une note de frais
           expect(screen.getAllByText('Envoyer une note de frais')).toBeTruthy()
-          // expect(screen.getAllByText('Envoyer une note de frais')).toBeFalsy();
         })
       })
     })

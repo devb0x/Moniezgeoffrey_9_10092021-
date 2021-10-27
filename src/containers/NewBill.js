@@ -42,9 +42,6 @@ export default class NewBill {
       document.getElementById('errorFileType').classList.remove('hideErrorMessage');
       this.document.querySelector(`input[data-testid='file']`).value = null;
     }
-    // else {
-    //   this.document.querySelector(`input[data-testid="file"]`).value = ''
-    // }
   }
 
   handleSubmit = e => {
@@ -66,7 +63,6 @@ export default class NewBill {
       fileName: this.fileName,
       status: 'pending'
     }
-    console.log(bill)
     this.createBill(bill)
     this.onNavigate(ROUTES_PATH['Bills'])
   }
