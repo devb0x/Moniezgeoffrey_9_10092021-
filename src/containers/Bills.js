@@ -58,7 +58,6 @@ export default class {
           })
           /* istanbul ignore next */
           .filter(bill => bill.email === userEmail)
-          console.log('length', bills.length)
         return bills
       })
       .catch(error => error)

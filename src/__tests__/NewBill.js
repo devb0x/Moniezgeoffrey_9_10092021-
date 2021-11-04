@@ -25,22 +25,6 @@ window.localStorage.setItem(
   })
 )
 
-const newBill = {
-  id: 'alkzezae',
-  status: 'refused',
-  pct: 20,
-  amount: 150,
-  email: 'test@test.fr',
-  name: 'newBillFixture',
-  vat: '40',
-  filename: 'somename.jpg',
-  date: '2021-01-02',
-  commentAdmin: 'ben voyons',
-  commentary: 'allez..',
-  type: 'Transport',
-  fileUrl: 'see later'
-}
-
 describe("Given I am connected as an employee", () => {
   let onNavigate
   let newBill
@@ -84,7 +68,6 @@ describe("Given I am connected as an employee", () => {
       localStorage: window.localStorage,
     })
 
-    // document.body.innerHTML = `<div id="root"></div>`
   })
 
   describe("When I am on NewBill Page", () => {
